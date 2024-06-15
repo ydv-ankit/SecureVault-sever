@@ -130,3 +130,30 @@ exports.deleteData = async (req, res) => {
       });
     });
 };
+
+// get data by id
+exports.getDataById = async (req, res) => {
+  const dataId = req.params.id;
+
+  await dataModel
+    .findById(dataId)
+    .then((data) => {
+      if (!data) {
+        return res.status(404).json({
+          data: "Data not found",
+          message: "error",
+        });
+      }
+
+      res.status(200).json({
+        data: data,
+        message: "success",
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        data: "Internal Server Error",
+        message: "error",
+      });
+    });
+};
