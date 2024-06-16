@@ -42,22 +42,29 @@ exports.create = async (req, res) => {
 
 // get all data for a user
 exports.getData = async (req, res) => {
-  const userId = new mongoose.Types.ObjectId(req.params.id);
+  try {
+    const userId = new mongoose.Types.ObjectId(req.params.id);
 
-  await dataModel
-    .find({ userId })
-    .then((data) => {
-      res.status(200).json({
-        data: data,
-        message: "success",
+    await dataModel
+      .find({ userId })
+      .then((data) => {
+        res.status(200).json({
+          data: data,
+          message: "success",
+        });
+      })
+      .catch((err) => {
+        res.status(500).json({
+          data: "Internal Server Error",
+          message: "error",
+        });
       });
-    })
-    .catch((err) => {
-      res.status(500).json({
-        data: "Internal Server Error",
-        message: "error",
-      });
+  } catch (error) {
+    res.status(500).json({
+      data: "Internal Server Error",
+      message: "error",
     });
+  }
 };
 
 // update a data for a user
